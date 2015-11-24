@@ -26,6 +26,18 @@ paths:
       description: Returns an object containing each of the games in the database
       produces:
         - application/json
+      parameters:
+        - in: query
+          name: year
+          description: Filters all the games by release year
+          required: false
+          type: string
+      parameters:
+        - in: query
+          name: publisher
+          description: Filters all the games by their respective publisher
+          required: false
+          type: string
       responses:
         200:
           description: Object containing all of the games
@@ -51,20 +63,22 @@ paths:
       responses:
         201:
           description: created new game
+          schema:
+            $ref: '#/definitions/Game'
         500:
           description: Internal server error
           schema:
             $ref: '#/definitions/Error'
-  /game/{vid}:
+  /game/{id}:
     get:
       tags:
         - games
-      summary: Get info on a specific game by id
+      summary: Get info on a specific game, by id
       description: Returns a game object by videogame id
       produces:
         - application/json
       parameters:
-        - name: vid
+        - name: id
           in: path
           description: Videogame id of game that is being fetched
           required: true
@@ -91,7 +105,7 @@ paths:
       consumes:
         - application/json
       parameters:
-        - name: vid
+        - name: id
           in: path
           description: Videogame id of game that is being fetched
           required: true
@@ -100,14 +114,14 @@ paths:
       responses:
         200:
           description: Successful response
-        202:
-          description: Data accepted
+          schema:
+            $ref: '#/definitions/Game'
         401:
           description: Not authorized to perform this action
           schema:
             $ref: '#/definitions/Error'
-        422:
-          description: Invalid data
+        400:
+          description: Bad request
           schema:
             $ref: '#/definitions/Error'
         500:
@@ -120,7 +134,7 @@ paths:
       summary: Deletes a game from the database
       description: Delete a game from the database using the videogame id
       parameters:
-        - name: vid
+        - name: id
           in: path
           description: Videogame id of game that is being fetched
           required: true
@@ -147,6 +161,24 @@ paths:
       description: Returns an object containing each of the platforms in the database
       produces:
         - application/json
+      parameters:
+        - in: query
+          name: year
+          description: Filters all the platforms by release year
+          required: false
+          type: string
+      parameters:
+        - in: query
+          name: console
+          description: Filters out all of the non console platforms
+          required: false
+          type: string
+      parameters:
+        - in: query
+          name: computer
+          description: Filters out all of the non computer platforms
+          required: false
+          type: string
       responses: 
         200:
           description: Object containing all of the platforms
@@ -172,11 +204,13 @@ paths:
       responses:
         201:
           description: created new platform
+          schema:
+            $ref: '#/definitions/Platform'
         500:
           description: Internal server error
           schema:
             $ref: '#/definitions/Error'
-  /platform/{pid}:
+  /platform/{id}:
     get:
       tags:
         - platforms
@@ -185,7 +219,7 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: pid
+        - name: id
           in: path
           description: ID of the platform being retrieved
           required: true
@@ -212,7 +246,7 @@ paths:
       consumes:
         - application/json
       parameters:
-        - name: pid
+        - name: id
           in: path
           description: ID of the platform being updated
           required: true
@@ -221,8 +255,8 @@ paths:
       responses:
         200:
           description: Successful response
-        202:
-          description: Data accepted
+          schema:
+            $ref: '#/definitions/Platform'
         401:
           description: Not authorized to perform this action
           schema:
@@ -237,7 +271,7 @@ paths:
       summary: Delete a platform from the library
       description: Deletes a specified platform from the database
       parameters:
-        - name: pid
+        - name: id
           in: path
           description: Id of the platform being deleted
           required: true
@@ -260,26 +294,28 @@ paths:
 definitions:
   Game:
     properties:
-      vid:
+      id:
         type: integer
-      releaseyear:
+      releaseYear:
         type: integer
       price:
         type: integer
       title:
+        type: string
+      publisher:
         type: string
       genre:
         type: string
       platforms:
         type: array
         items: 
-          $ref: '#/definitions/Platform'
+          $ref: '#/definitions/Platforms'
 
   Platform:
     properties:
-      pid:
+      id:
         type: integer
-      year:
+      releaseYear:
         type: integer
       name:
         type: string
@@ -291,13 +327,13 @@ definitions:
         type: boolean
 
   Games:
-    title: arrayofgames
+    title: arrayOfGames
     type: array
     items:
         $ref: '#/definitions/Game'
 
   Platforms:
-    title: arrayofplatforms
+    title: arrayOfPlatforms
     type: array
     items:
       $ref: '#/definitions/Platform'
