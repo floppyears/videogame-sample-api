@@ -31,8 +31,7 @@ paths:
           name: year
           description: Filters all the games by release year
           required: false
-          type: string
-      parameters:
+          type: integer
         - in: query
           name: publisher
           description: Filters all the games by their respective publisher
@@ -143,8 +142,6 @@ paths:
       responses:
         200:
           description: Successful response
-        202:
-          description: Delete accepted
         401:
           description: Not authorized to perform this action
           schema:
@@ -166,19 +163,17 @@ paths:
           name: year
           description: Filters all the platforms by release year
           required: false
-          type: string
-      parameters:
+          type: integer
         - in: query
           name: console
           description: Filters out all of the non console platforms
           required: false
-          type: string
-      parameters:
+          type: boolean
         - in: query
           name: computer
           description: Filters out all of the non computer platforms
           required: false
-          type: string
+          type: boolean
       responses: 
         200:
           description: Object containing all of the platforms
@@ -280,8 +275,6 @@ paths:
       responses:
         200:
           description: Succesful response
-        202:
-          description: Delete accepted
         401:
           description: Not authorized to perform this action
           schema:
@@ -307,9 +300,7 @@ definitions:
       genre:
         type: string
       platforms:
-        type: array
-        items: 
-          $ref: '#/definitions/Platforms'
+        $ref: '#/definitions/Platforms'
 
   Platform:
     properties:
@@ -330,7 +321,7 @@ definitions:
     title: arrayOfGames
     type: array
     items:
-        $ref: '#/definitions/Game'
+      $ref: '#/definitions/Game'
 
   Platforms:
     title: arrayOfPlatforms
