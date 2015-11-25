@@ -1,0 +1,343 @@
+swagger: '2.0'
+info:
+  title: Videogame Sample API
+  description: API for accessing a database with videogames and platforms
+  version: '0.0'
+  license:
+    name: GNU Affero General Public License Version 3
+    url: http://www.gnu.org/licenses/agpl-3.0.en.html
+externalDocs:
+  description: GitHub Repository
+  url: https://github.com/osu-mist/videogame-sample-api
+host: localhost
+schemes:
+  - http
+basePath: /api/v0
+consumes:
+  - text/plain
+produces:
+  - text/plain
+paths:
+  /games:
+    get:
+      tags:
+        - games
+      summary: Get info on all of the games in the database
+      description: Returns an object containing each of the games in the database
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: year
+          description: Filters all the games by release year
+          required: false
+          type: integer
+        - in: query
+          name: publisher
+          description: Filters all the games by their respective publisher
+          required: false
+          type: string
+      responses:
+        200:
+          description: Object containing all of the games
+          schema:
+            $ref: '#/definitions/Games'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Post a game to the game library
+      tags:
+        - games
+      consumes: 
+        - application/json
+      parameters:
+      - name: body
+        in: body
+        description: Game to be added to the library
+        required: true
+        schema:
+          $ref: '#/definitions/Game'
+      responses:
+        201:
+          description: created new game
+          schema:
+            $ref: '#/definitions/Game'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+  /game/{id}:
+    get:
+      tags:
+        - games
+      summary: Get info on a specific game, by id
+      description: Returns a game object by videogame id
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Videogame id of game that is being fetched
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Game'
+        404:
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - games
+      summary: Updates a game via a PUT with the video game id
+      description: Update a game object with a put request
+      consumes:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Videogame id of game that is being fetched
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Game'
+        401:
+          description: Not authorized to perform this action
+          schema:
+            $ref: '#/definitions/Error'
+        400:
+          description: Bad request
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'    
+    delete:
+      tags:
+        - games
+      summary: Deletes a game from the database
+      description: Delete a game from the database using the videogame id
+      parameters:
+        - name: id
+          in: path
+          description: Videogame id of game that is being fetched
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: Successful response
+        401:
+          description: Not authorized to perform this action
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+  /platforms:
+    get:
+      tags:
+        - platforms
+      summary: Get info on all of the platforms in the database
+      description: Returns an object containing each of the platforms in the database
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: year
+          description: Filters all the platforms by release year
+          required: false
+          type: integer
+        - in: query
+          name: console
+          description: Filters out all of the non console platforms
+          required: false
+          type: boolean
+        - in: query
+          name: computer
+          description: Filters out all of the non computer platforms
+          required: false
+          type: boolean
+      responses: 
+        200:
+          description: Object containing all of the platforms
+          schema:
+            $ref: '#/definitions/Platforms'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Post a platform to the platform library
+      tags:
+        - platforms
+      consumes: 
+        - application/json
+      parameters:
+      - name: body
+        in: body
+        description: platform to be added to the library
+        required: true
+        schema:
+          $ref: '#/definitions/Platform'
+      responses:
+        201:
+          description: created new platform
+          schema:
+            $ref: '#/definitions/Platform'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+  /platform/{id}:
+    get:
+      tags:
+        - platforms
+      summary: Look up a specific game by its id
+      description: Returns a platform object
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of the platform being retrieved
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Platform'
+        404:
+          description: Resource not found
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      tags:
+        - platforms
+      summary: Updates a platform in the library via a PUT
+      description: Update the platform specified by the id in the path
+      consumes:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of the platform being updated
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: Successful response
+          schema:
+            $ref: '#/definitions/Platform'
+        401:
+          description: Not authorized to perform this action
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - platforms
+      summary: Delete a platform from the library
+      description: Deletes a specified platform from the database
+      parameters:
+        - name: id
+          in: path
+          description: Id of the platform being deleted
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: Succesful response
+        401:
+          description: Not authorized to perform this action
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  Game:
+    properties:
+      id:
+        type: integer
+      releaseYear:
+        type: integer
+      price:
+        type: integer
+      title:
+        type: string
+      publisher:
+        type: string
+      genre:
+        type: string
+      platforms:
+        $ref: '#/definitions/Platforms'
+
+  Platform:
+    properties:
+      id:
+        type: integer
+      releaseYear:
+        type: integer
+      name:
+        type: string
+      manufacturer:
+        type: string
+      computer:
+        type: boolean
+      console:
+        type: boolean
+
+  Games:
+    title: arrayOfGames
+    type: array
+    items:
+      $ref: '#/definitions/Game'
+
+  Platforms:
+    title: arrayOfPlatforms
+    type: array
+    items:
+      $ref: '#/definitions/Platform'
+
+  Error:
+    properties:
+      status:
+        type: integer
+      developerMessage:
+        type: string
+      userMesage:
+        type: string
+      code:
+        type: integer
+      details:
+        type: string
