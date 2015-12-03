@@ -1,14 +1,23 @@
 swagger: '2.0'
 info:
+<<<<<<< HEAD
   title: Videogame Sample API
   description: API for accessing a database with videogames and platforms
+=======
+  title: Web API Skeleton
+  description: Skeleton for Dropwizard Web APIs
+>>>>>>> skeleton-master
   version: '0.0'
   license:
     name: GNU Affero General Public License Version 3
     url: http://www.gnu.org/licenses/agpl-3.0.en.html
 externalDocs:
   description: GitHub Repository
+<<<<<<< HEAD
   url: https://github.com/osu-mist/videogame-sample-api
+=======
+  url: https://github.com/osu-mist/web-api-skeleton
+>>>>>>> skeleton-master
 host: localhost
 schemes:
   - http
@@ -18,6 +27,7 @@ consumes:
 produces:
   - text/plain
 paths:
+<<<<<<< HEAD
   /games:
     get:
       tags:
@@ -329,6 +339,59 @@ definitions:
     items:
       $ref: '#/definitions/Platform'
 
+=======
+  /:
+    get:
+      summary: Get information
+      description: Build and runtime information about the application.
+      responses:
+        200:
+          description: Object containing information
+          schema:
+            $ref: '#/definitions/Info'
+  /sample:
+    get:
+      summary: Get message
+      description: This is a sample resource that returns a short message.
+      responses:
+        200:
+          description: A short message
+          schema:
+            type: string
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Post message
+      description: This is a sample resource that returns the message it receives.
+      parameters:
+        - name: message
+          in: body
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: The message received
+          schema:
+            type: string
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Info:
+    properties:
+      name:
+        type: string
+      time:
+        type: integer
+      commit:
+        type: string
+      documentation:
+        type: string
+>>>>>>> skeleton-master
   Error:
     properties:
       status:
@@ -340,4 +403,8 @@ definitions:
       code:
         type: integer
       details:
+<<<<<<< HEAD
         type: string
+=======
+        type: string
+>>>>>>> skeleton-master
