@@ -23,6 +23,7 @@ import javax.ws.rs.POST
 import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
+import javax.ws.rs.QueryParam
 import javax.ws.rs.Produces
 import javax.ws.rs.WebApplicationException
 import javax.ws.rs.core.Context
@@ -45,9 +46,32 @@ class PlatformResource {
         this.platformDAO = platformDAO
     }
 
+    /*
+     * GETs all of the platforms that are not filtered out by the parameters
+     * If no parameters are provided it returns all of the entries
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Platform> getAllPlatforms(@Auth AuthenticatedUser authenticatedUser) {
-        platformDAO.getAllPlatforms()
+    public List<Platform> getPlatforms(
+            @Auth AuthenticatedUser authenticatedUser,
+            @QueryParam("releaseYear") String releaseYear,
+            @QueryParam("computer") Boolean computer,
+            @QueryParam("console") Boolean console) {
+        platformDAO.getPlatforms(releaseYear, computer, console)
     }
+
+    /*
+     * Returns a single entry based on the id in the path
+     */
+    @Path("/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response platformById(@PathParam("id") Integer id) {
+        Platform returnPlatform = platformDAO.getPlatformById(id)
+        Response returnResponse
+
+        returnResponse = Response.ok(returnPlatform).build()
+        returnResponse
+    }
+
 }
