@@ -10,9 +10,5 @@ import io.dropwizard.db.DataSourceFactory
  * An object representation of the YAML configuration file.
  */
 class VideogameApplicationConfiguration extends Configuration {
-   /* @JsonProperty('database')
-    @NotNull
-    @Valid
-    List<Credentials> credentialsList*/
     DataSourceFactory database = new DataSourceFactory()
 }

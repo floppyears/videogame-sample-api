@@ -1,10 +1,6 @@
 package edu.oregonstate.mist.videogamesampleapi.core
 
-/*
- * Created by George on 12/22/15.
- */
-
-/*
+/**
  * Platform representation
  */
 

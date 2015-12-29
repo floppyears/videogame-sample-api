@@ -1,7 +1,6 @@
 package edu.oregonstate.mist.videogamesampleapi.mapper
 
 /**
- * Created by george on 12/22/15.
  * Mapper for Platform to database
  */
 
