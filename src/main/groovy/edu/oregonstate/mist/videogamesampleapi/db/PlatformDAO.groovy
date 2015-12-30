@@ -36,4 +36,9 @@ public interface PlatformDAO {
         """)
     Platform getPlatformById(@Bind("id") Integer id)
 
+    @SqlQuery("""
+        SELECT platform_id_seq.NEXTVAL FROM DUAL
+        """)
+    Integer getNextPlatformId()
+
 }

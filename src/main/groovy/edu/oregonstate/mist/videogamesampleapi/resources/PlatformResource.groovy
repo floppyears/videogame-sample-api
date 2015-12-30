@@ -12,7 +12,10 @@ import edu.oregonstate.mist.videogamesampleapi.db.PlatformDAO
 import edu.oregonstate.mist.api.Resource
 import io.dropwizard.auth.Auth
 
+import javax.validation.Valid
+import javax.ws.rs.Consumes
 import javax.ws.rs.GET
+import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.QueryParam
@@ -65,5 +68,17 @@ class PlatformResource extends Resource {
         }
         responseBuilder.build()
     }
+
+    /**
+     * POSTs a new game to the database
+     */
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response postPlatform(@Valid Platform newPlatform) {
+        
+    }
+
+
 
 }
