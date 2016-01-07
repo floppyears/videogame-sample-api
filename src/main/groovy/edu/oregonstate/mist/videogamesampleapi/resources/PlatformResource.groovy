@@ -88,4 +88,12 @@ class PlatformResource extends Resource {
             String constraintError = err.getMessage()
         }
     }
+
+    @Path("/{id : \\d+}")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deletePlatform(@PathParam("id") Integer id) {
+        platformDAO.deleteById(id)
+        Response.ok().build()
+    }
 }
