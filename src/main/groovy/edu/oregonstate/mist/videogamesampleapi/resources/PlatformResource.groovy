@@ -79,7 +79,7 @@ class PlatformResource extends Resource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response postPlatform(@Valid Platform newPlatform) {
         ResponseBuilder responseBuilder
-        Integer newId = platformDAO.getNextPlatformId()
+        Integer newId = platformDAO.grabNextPlatformId()
         try {
             platformDAO.postPlatform(newId, newPlatform.getReleaseYear(), newPlatform.getName(), newPlatform.getManufacturer(), newPlatform.getComputer(), newPlatform.getConsole())
             responseBuilder = ok(newPlatform)
