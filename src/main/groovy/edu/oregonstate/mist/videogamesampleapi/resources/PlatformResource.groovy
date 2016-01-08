@@ -93,7 +93,15 @@ class PlatformResource extends Resource {
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     public Response deletePlatform(@PathParam("id") Integer id) {
-        platformDAO.deleteById(id)
-        Response.ok().build()
+        Platform returnPlatform = platformDAO.getPlatformById(id)
+        ResponseBuilder responseBuilder
+
+        if (returnPlatform == null) {
+            responseBuilder = notFound()
+        }
+        else {
+            platformDAO.deleteById(id)
+            responseBuilder = ok(returnPlatform)
+        }
     }
 }
