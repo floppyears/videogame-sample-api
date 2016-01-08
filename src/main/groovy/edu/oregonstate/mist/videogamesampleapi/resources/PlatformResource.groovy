@@ -79,13 +79,18 @@ class PlatformResource extends Resource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response postPlatform(@Valid Platform newPlatform) {
         ResponseBuilder responseBuilder
-        Integer newId = platformDAO.grabNextPlatformId()
         try {
             platformDAO.postPlatform(newPlatform.getReleaseYear(), newPlatform.getName(), newPlatform.getManufacturer(), newPlatform.getComputer(), newPlatform.getConsole())
-            responseBuilder = ok(newPlatform)
+
+            //necessary to find and return the new object this way because it comes in w/o an id and dates
+            Platform returnPlatform = platformDAO.platformByName(newPlatform.getName())
+
+            responseBuilder = ok(returnPlatform)
             responseBuilder.build()
         } catch (UnableToExecuteStatementException err) {
             String constraintError = err.getMessage()
+            responseBuilder = badRequest(constraintError)
+            responseBuilder.build()
         }
     }
 }

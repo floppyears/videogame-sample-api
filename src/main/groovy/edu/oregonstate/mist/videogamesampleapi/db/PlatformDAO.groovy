@@ -42,6 +42,13 @@ public interface PlatformDAO {
     Integer grabNextPlatformId()
 
     @SqlQuery("""
+        SELECT *
+        FROM PLATFORMS
+        WHERE TITLE = :name
+        """)
+    Platform platformByName(@Bind("name") String name)
+
+    @SqlQuery("""
         SELECT sysdate FROM DUAL
         """)
     Date grabSysdate()
