@@ -18,7 +18,10 @@ public class PlatformMapper implements ResultSetMapper<Platform> {
                 name:           rs.getString('TITLE'),
                 manufacturer:   rs.getString('MANUFACTURER'),
                 computer:       rs.getBoolean('COMPUTER'),
-                console:        rs.getBoolean('CONSOLE')
+                console:        rs.getBoolean('CONSOLE'),
+                dateCreated:    rs.getDate('DATE_CREATED'),
+                lastUpdated:    rs.getDate('LAST_UPDATED')
+
         )
     }
 }

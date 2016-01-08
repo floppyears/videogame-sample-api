@@ -1,5 +1,7 @@
 package edu.oregonstate.mist.videogamesampleapi.core
 
+import java.sql.Date
+
 /**
  * Platform representation
  */
@@ -11,4 +13,6 @@ class Platform {
     String manufacturer
     Boolean computer
     Boolean console
+    Date dateCreated
+    Date lastUpdated
 }
