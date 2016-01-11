@@ -8,7 +8,7 @@ info:
     url: http://www.gnu.org/licenses/agpl-3.0.en.html
 externalDocs:
   description: GitHub Repository
-  url: https://github.com/osu-mist/videogame-sample-api
+  url: https://github.com/osu-mist/videogamesampleapi
 host: localhost
 schemes:
   - http

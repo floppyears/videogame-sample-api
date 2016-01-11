@@ -1,4 +1,4 @@
-package edu.oregonstate.mist.webapiskeleton.core
+package edu.oregonstate.mist.videogamesampleapi.core
 
 /**
  * Sample representation class.
