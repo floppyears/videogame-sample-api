@@ -12,7 +12,11 @@ import edu.oregonstate.mist.videogamesampleapi.db.PlatformDAO
 import edu.oregonstate.mist.api.Resource
 import io.dropwizard.auth.Auth
 
+import javax.validation.Valid
+import javax.ws.rs.Consumes
+import javax.ws.rs.DELETE
 import javax.ws.rs.GET
+import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.QueryParam
@@ -22,6 +26,7 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriInfo
 import javax.ws.rs.core.Response.ResponseBuilder
+import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException
 
 @Path("/platforms")
 @Produces(MediaType.APPLICATION_JSON)
@@ -66,4 +71,37 @@ class PlatformResource extends Resource {
         responseBuilder.build()
     }
 
+    /**
+     * POSTs a new game to the database
+     */
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response postPlatform(@Valid Platform newPlatform) {
+        ResponseBuilder responseBuilder
+        Integer newId = platformDAO.grabNextPlatformId()
+        try {
+            platformDAO.postPlatform(newId, newPlatform.getReleaseYear(), newPlatform.getName(), newPlatform.getManufacturer(), newPlatform.getComputer(), newPlatform.getConsole())
+            responseBuilder = ok(newPlatform)
+            responseBuilder.build()
+        } catch (UnableToExecuteStatementException err) {
+            String constraintError = err.getMessage()
+        }
+    }
+
+    @Path("/{id : \\d+}")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deletePlatform(@PathParam("id") Integer id) {
+        Platform returnPlatform = platformDAO.getPlatformById(id)
+        ResponseBuilder responseBuilder
+
+        if (returnPlatform == null) {
+            responseBuilder = notFound()
+        }
+        else {
+            platformDAO.deleteById(id)
+            responseBuilder = ok(returnPlatform)
+        }
+    }
 }

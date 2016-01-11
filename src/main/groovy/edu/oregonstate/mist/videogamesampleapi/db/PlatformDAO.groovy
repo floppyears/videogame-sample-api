@@ -36,4 +36,27 @@ public interface PlatformDAO {
         """)
     Platform getPlatformById(@Bind("id") Integer id)
 
+    @SqlQuery("""
+        SELECT platform_id_seq.NEXTVAL FROM DUAL
+        """)
+    Integer grabNextPlatformId()
+
+    @SqlQuery("""
+        SELECT sysdate FROM DUAL
+        """)
+    Date grabSysdate()
+
+    @SqlUpdate("""INSERT INTO PLATFORMS VALUES (:id, :name, :manufacturer, :releaseYear, :console, :computer)""")
+    void postPlatform(@Bind ("id") Integer id,
+                      @Bind("releaseYear") Integer releaseYear,
+                      @Bind("name") String name,
+                      @Bind("manufacturer") String manufacturer,
+                      @Bind("computer") Boolean computer,
+                      @Bind("console") Boolean console)
+
+    @SqlUpdate("""
+        DELETE FROM PLATFORMS
+        WHERE ID = :id
+        """)
+    void deleteById(@Bind("id") Integer id)
 }
