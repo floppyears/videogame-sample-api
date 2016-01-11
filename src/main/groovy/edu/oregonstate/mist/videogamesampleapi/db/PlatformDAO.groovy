@@ -37,7 +37,6 @@ public interface PlatformDAO {
     Platform getPlatformById(@Bind("id") Integer id)
 
     @SqlQuery("""
-        HEAD
         SELECT *
         FROM PLATFORMS
         WHERE TITLE = :name

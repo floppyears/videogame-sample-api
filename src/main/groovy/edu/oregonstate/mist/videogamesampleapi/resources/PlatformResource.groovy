@@ -107,6 +107,7 @@ class PlatformResource extends Resource {
         else {
             platformDAO.deleteById(id)
             responseBuilder = ok(returnPlatform)
+            responseBuilder.build()
         }
     }
 }
