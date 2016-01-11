@@ -37,21 +37,11 @@ public interface PlatformDAO {
     Platform getPlatformById(@Bind("id") Integer id)
 
     @SqlQuery("""
-        SELECT platform_id_seq.NEXTVAL FROM DUAL
-        """)
-    Integer grabNextPlatformId()
-
-    @SqlQuery("""
         SELECT *
         FROM PLATFORMS
         WHERE TITLE = :name
         """)
     Platform platformByName(@Bind("name") String name)
-
-    @SqlQuery("""
-        SELECT sysdate FROM DUAL
-        """)
-    Date grabSysdate()
 
     @SqlUpdate("""INSERT INTO PLATFORMS VALUES (platform_id_seq.NEXTVAL, :name, :manufacturer, :releaseYear, :console, :computer, sysdate, sysdate)""")
     void postPlatform(@Bind("releaseYear") Integer releaseYear,
