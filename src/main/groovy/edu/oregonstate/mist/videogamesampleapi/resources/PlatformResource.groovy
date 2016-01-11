@@ -93,4 +93,20 @@ class PlatformResource extends Resource {
             responseBuilder.build()
         }
     }
+
+    @Path("/{id : \\d+}")
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deletePlatform(@PathParam("id") Integer id) {
+        Platform returnPlatform = platformDAO.getPlatformById(id)
+        ResponseBuilder responseBuilder
+
+        if (returnPlatform == null) {
+            responseBuilder = notFound()
+        }
+        else {
+            platformDAO.deleteById(id)
+            responseBuilder = ok(returnPlatform)
+        }
+    }
 }

@@ -37,6 +37,7 @@ public interface PlatformDAO {
     Platform getPlatformById(@Bind("id") Integer id)
 
     @SqlQuery("""
+        HEAD
         SELECT *
         FROM PLATFORMS
         WHERE TITLE = :name
@@ -50,4 +51,9 @@ public interface PlatformDAO {
                       @Bind("computer") Boolean computer,
                       @Bind("console") Boolean console)
 
+    @SqlUpdate("""
+        DELETE FROM PLATFORMS
+        WHERE ID = :id
+        """)
+    void deleteById(@Bind("id") Integer id)
 }
