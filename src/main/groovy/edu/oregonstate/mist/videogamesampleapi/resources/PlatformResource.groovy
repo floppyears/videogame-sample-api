@@ -17,6 +17,7 @@ import javax.ws.rs.Consumes
 import javax.ws.rs.DELETE
 import javax.ws.rs.GET
 import javax.ws.rs.POST
+import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.QueryParam
@@ -88,8 +89,8 @@ class PlatformResource extends Resource {
             responseBuilder = ok(returnPlatform)
             responseBuilder.build()
         } catch (UnableToExecuteStatementException err) {
-            String constraintError = err.getMessage()
-            responseBuilder = badRequest(constraintError)
+            String executeError = err.getMessage()
+            responseBuilder = badRequest(executeError)
             responseBuilder.build()
         }
     }
@@ -108,6 +109,44 @@ class PlatformResource extends Resource {
             platformDAO.deleteById(id)
             responseBuilder = ok(returnPlatform)
             responseBuilder.build()
+        }
+    }
+
+    @Path("/{id : \\d+}")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response putPlatform(@Valid Platform newPlatform) {
+        ResponseBuilder responseBuilder
+        Platform returnPlatform
+
+        Platform checkPlatform = platformDAO.getPlatformById(newPlatform.getId())
+
+        //POSTs if the platform doesn't already exist
+        if (checkPlatform == null) {
+            try {
+                platformDAO.postPlatform(newPlatform.getReleaseYear(), newPlatform.getName(), newPlatform.getManufacturer(), newPlatform.getComputer(), newPlatform.getConsole())
+                returnPlatform = platformDAO.platformByName(newPlatform.getName())
+                responseBuilder = ok(returnPlatform)
+                responseBuilder.build()
+            } catch (UnableToExecuteStatementException err) {
+                String executeError = err.getMessage()
+                responseBuilder = badRequest(executeError)
+                responseBuilder.build()
+            }
+        }
+        //Otherwise execute a PUT
+        else {
+            try {
+                platformDAO.putPlatform(newPlatform.getId(), newPlatform.getReleaseYear(), newPlatform.getName(), newPlatform.getManufacturer(), newPlatform.getComputer(), newPlatform.getConsole())
+                returnPlatform = platformDAO.platformByName(newPlatform.getName())
+                responseBuilder = ok(returnPlatform)
+                responseBuilder.build()
+            } catch (UnableToExecuteStatementException err) {
+                String executeError = err.getMessage()
+                responseBuilder = badRequest(executeError)
+                responseBuilder.build()
+            }
         }
     }
 }

@@ -55,4 +55,16 @@ public interface PlatformDAO {
         WHERE ID = :id
         """)
     void deleteById(@Bind("id") Integer id)
+
+    @SqlUpdate("""
+        UPDATE PLATFORMS
+        SET TITLE = :name, MANUFACTURER = :manufacturer, RELEASE_YEAR = :releaseYear, COMPUTER = :computer, CONSOLE = :console, LAST_UPDATED = sysdate
+        WHERE ID = :id
+        """)
+    void putPlatform(@Bind("id") Integer id,
+                     @Bind("releaseYear") Integer releaseYear,
+                     @Bind("name") String name,
+                     @Bind("manufacturer") String manufacturer,
+                     @Bind("computer") Boolean computer,
+                     @Bind("console") Boolean console)
 }
