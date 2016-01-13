@@ -49,11 +49,20 @@ class GameResource extends Resource {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Game> allGames(
+    public Response allGames(
             @Auth AuthenticatedUser authenticatedUser,
             @QueryParam("releaseYear") String releaseYear,
             @QueryParam("publisher") String publisher) {
-        gameDAO.allGames(releaseYear, publisher)
+
+        ResponseBuilder responseBuilder
+        List<Game> returnList = gameDAO.allGames(releaseYear, publisher)
+
+        returnList.each {
+            it.compatiblePlatforms = platformDAO.grabCompatiblePlatforms(it.id)
+        }
+
+        responseBuilder = ok(returnList)
+        responseBuilder.build()
     }
 
     /**
