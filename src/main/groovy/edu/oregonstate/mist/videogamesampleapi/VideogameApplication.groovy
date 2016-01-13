@@ -5,7 +5,9 @@ import edu.oregonstate.mist.api.Resource
 import edu.oregonstate.mist.api.InfoResource
 import edu.oregonstate.mist.api.AuthenticatedUser
 import edu.oregonstate.mist.api.BasicAuthenticator
+import edu.oregonstate.mist.videogamesampleapi.db.GameDAO
 import edu.oregonstate.mist.videogamesampleapi.db.PlatformDAO
+import edu.oregonstate.mist.videogamesampleapi.resources.GameResource
 import edu.oregonstate.mist.videogamesampleapi.resources.PlatformResource
 import edu.oregonstate.mist.videogamesampleapi.resources.SampleResource
 import io.dropwizard.Application
@@ -42,10 +44,12 @@ class VideogameApplication extends Application<VideogameApplicationConfiguration
         final DBI jdbi = factory.build(environment, configuration.getDatabase(), "jdbi")
 
         final PlatformDAO platformDAO = jdbi.onDemand(PlatformDAO.class)
+        final GameDAO gameDAO = jdbi.onDemand(GameDAO.class)
 
         environment.jersey().register(new SampleResource())
         environment.jersey().register(new InfoResource())
         environment.jersey().register(new PlatformResource(platformDAO))
+        environment.jersey().register(new GameResource(gameDAO))
 
         environment.jersey().register(
                 AuthFactory.binder(
