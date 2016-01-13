@@ -8,8 +8,10 @@ import edu.oregonstate.mist.api.Error
  */
 
 import edu.oregonstate.mist.videogamesampleapi.core.Game
+import edu.oregonstate.mist.videogamesampleapi.core.Platform
 import edu.oregonstate.mist.videogamesampleapi.db.GameDAO
 import edu.oregonstate.mist.api.Resource
+import edu.oregonstate.mist.videogamesampleapi.db.PlatformDAO
 import io.dropwizard.auth.Auth
 
 import javax.validation.Valid
@@ -34,9 +36,11 @@ import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException
 class GameResource extends Resource {
 
     private final GameDAO gameDAO
+    private final PlatformDAO platformDAO
 
-    public GameResource(GameDAO gameDAO) {
+    public GameResource(GameDAO gameDAO, PlatformDAO platformDAO) {
         this.gameDAO = gameDAO
+        this.platformDAO = platformDAO
     }
 
     /**
@@ -61,6 +65,8 @@ class GameResource extends Resource {
     public Response gameById(@PathParam("id") Integer id) {
         Game returnGame = gameDAO.gameById(id)
         ResponseBuilder responseBuilder
+
+        returnGame.compatiblePlatforms = platformDAO.grabCompatiblePlatforms(id)
 
         if (!returnGame) {
             responseBuilder = notFound()

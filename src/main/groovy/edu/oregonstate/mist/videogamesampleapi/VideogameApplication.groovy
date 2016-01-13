@@ -1,6 +1,5 @@
 package edu.oregonstate.mist.videogamesampleapi
 
-import edu.oregonstate.mist.api.Configuration
 import edu.oregonstate.mist.api.Resource
 import edu.oregonstate.mist.api.InfoResource
 import edu.oregonstate.mist.api.AuthenticatedUser
@@ -49,7 +48,7 @@ class VideogameApplication extends Application<VideogameApplicationConfiguration
         environment.jersey().register(new SampleResource())
         environment.jersey().register(new InfoResource())
         environment.jersey().register(new PlatformResource(platformDAO))
-        environment.jersey().register(new GameResource(gameDAO))
+        environment.jersey().register(new GameResource(gameDAO, platformDAO))
 
         environment.jersey().register(
                 AuthFactory.binder(
