@@ -51,4 +51,23 @@ class GameResource extends Resource {
             @QueryParam("publisher") String publisher) {
         gameDAO.allGames(releaseYear, publisher)
     }
+
+    /**
+     * Returns a single entry based on the id in the path
+     */
+    @Path("/{id : \\d+}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response gameById(@PathParam("id") Integer id) {
+        Game returnGame = gameDAO.gameById(id)
+        ResponseBuilder responseBuilder
+
+        if (!returnGame) {
+            responseBuilder = notFound()
+        }
+        else {
+            responseBuilder = ok(returnGame)
+        }
+        responseBuilder.build()
+    }
 }

@@ -19,4 +19,11 @@ public interface GameDAO {
     List<Game> allGames(@Bind("releaseYearFilter") String releaseYearFilter,
                         @Bind("publisherFilter") String publisherFilter)
 
+    @SqlQuery("""
+        SELECT *
+        FROM GAMES
+        WHERE ID = :id
+        """)
+    Game gameById(@Bind("id") Integer id)
+
 }

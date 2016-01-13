@@ -16,5 +16,5 @@ class Game {
     String genre
     Date dateCreated
     Date lastUpdated
-    //List<Platform> compatiblePlatforms
+    List<Platform> compatiblePlatforms
 }
