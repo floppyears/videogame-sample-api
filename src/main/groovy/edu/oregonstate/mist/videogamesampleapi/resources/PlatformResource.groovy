@@ -116,11 +116,11 @@ class PlatformResource extends Resource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response putPlatform(@Valid Platform newPlatform) {
+    public Response putPlatform(@Valid Platform newPlatform, @PathParam("id") Integer id) {
         ResponseBuilder responseBuilder
         Platform returnPlatform
 
-        Platform checkPlatform = platformDAO.getPlatformById(newPlatform.getId())
+        Platform checkPlatform = platformDAO.getPlatformById(id)
 
         //POSTs if the platform doesn't already exist
         if (checkPlatform == null) {
@@ -138,7 +138,7 @@ class PlatformResource extends Resource {
         //Otherwise execute a PUT
         else {
             try {
-                platformDAO.putPlatform(newPlatform.getId(), newPlatform.getReleaseYear(), newPlatform.getName(), newPlatform.getManufacturer(), newPlatform.getComputer(), newPlatform.getConsole())
+                platformDAO.putPlatform(id, newPlatform.getReleaseYear(), newPlatform.getName(), newPlatform.getManufacturer(), newPlatform.getComputer(), newPlatform.getConsole())
                 returnPlatform = platformDAO.platformByName(newPlatform.getName())
                 responseBuilder = ok(returnPlatform)
                 responseBuilder.build()
