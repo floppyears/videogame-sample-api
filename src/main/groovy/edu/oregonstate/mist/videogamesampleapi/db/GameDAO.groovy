@@ -28,12 +28,4 @@ public interface GameDAO {
         """)
     Game gameById(@Bind("id") Integer id)
 
-  /*  @SqlQuery("""
-        SELECT *
-        FROM PLATFORMS
-        WHERE ID
-        IN (SELECT PLATFORM_ID FROM GAME_PLATFORM WHERE GAME_ID = :gameId)
-        """)
-    List<Platform> grabCompatiblePlatforms(@Bind("gameId") Integer gameId)*/
-
 }
