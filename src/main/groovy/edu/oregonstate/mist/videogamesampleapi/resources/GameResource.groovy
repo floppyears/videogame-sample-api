@@ -85,4 +85,23 @@ class GameResource extends Resource {
         }
         responseBuilder.build()
     }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response postGame(@Valid Game newGame) {
+        ResponseBuilder responseBuilder
+        try {
+            gameDAO.postGame(newGame.getTitle(), newGame.getPrice(), newGame.getPublisher(), newGame.getGenre(), newGame.getReleaseYear())
+
+            //gets the newly created object so it can be displayed to the user with auto-filled fields
+            Game returnGame = gameDAO.gameByTitle(newGame.getTitle())
+            responseBuilder = ok(returnGame)
+
+        } catch (UnableToExecuteStatementException err) {
+            String executeError = err.getMessage()
+            responseBuilder = badRequest(executeError)
+        }
+        responseBuilder.build()
+    }
 }

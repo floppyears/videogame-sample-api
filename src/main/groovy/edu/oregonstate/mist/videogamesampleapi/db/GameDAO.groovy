@@ -28,4 +28,20 @@ public interface GameDAO {
         """)
     Game gameById(@Bind("id") Integer id)
 
+    @SqlQuery("""
+        SELECT *
+        FROM GAMES
+        WHERE TITLE = :title
+        """)
+    Game gameByTitle(@Bind("title") String title)
+
+    @SqlUpdate("""
+        INSERT INTO GAMES
+        VALUES (game_id_seq.NEXTVAL, :title, :price, :publisher, :genre, :releaseYear, sysdate, sysdate)
+        """)
+    void postGame(@Bind("title") String title,
+                  @Bind("price") Float price,
+                  @Bind("publisher") String publisher,
+                  @Bind("genre") String genre,
+                  @Bind("releaseYear") Integer releaseYear)
 }
