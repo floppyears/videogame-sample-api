@@ -79,8 +79,7 @@ class GameResource extends Resource {
 
         if (!returnGame) {
             responseBuilder = notFound()
-        }
-        else {
+        } else {
             responseBuilder = ok(returnGame)
         }
         responseBuilder.build()
