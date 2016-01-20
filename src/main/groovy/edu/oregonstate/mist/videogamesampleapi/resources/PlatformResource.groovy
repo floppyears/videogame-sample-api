@@ -80,19 +80,8 @@ class PlatformResource extends Resource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response postPlatform(@Valid Platform newPlatform) {
         ResponseBuilder responseBuilder
-        try {
-            platformDAO.postPlatform(newPlatform.getReleaseYear(), newPlatform.getName(), newPlatform.getManufacturer(), newPlatform.getComputer(), newPlatform.getConsole())
-
-            //necessary to find and return the new object this way because it comes in w/o an id and dates
-            Platform returnPlatform = platformDAO.platformByName(newPlatform.getName())
-
-            responseBuilder = ok(returnPlatform)
-            responseBuilder.build()
-        } catch (UnableToExecuteStatementException err) {
-            String executeError = err.getMessage()
-            responseBuilder = badRequest(executeError)
-            responseBuilder.build()
-        }
+        responseBuilder = postHelper(newPlatform)
+        responseBuilder.build()
     }
 
     @Path("/{id : \\d+}")
@@ -108,8 +97,8 @@ class PlatformResource extends Resource {
         else {
             platformDAO.deleteById(id)
             responseBuilder = ok(returnPlatform)
-            responseBuilder.build()
         }
+        responseBuilder.build()
     }
 
     @Path("/{id : \\d+}")
@@ -123,30 +112,52 @@ class PlatformResource extends Resource {
         Platform checkPlatform = platformDAO.getPlatformById(id)
 
         //POSTs if the platform doesn't already exist
-        if (checkPlatform == null) {
-            try {
-                platformDAO.postPlatform(newPlatform.getReleaseYear(), newPlatform.getName(), newPlatform.getManufacturer(), newPlatform.getComputer(), newPlatform.getConsole())
-                returnPlatform = platformDAO.platformByName(newPlatform.getName())
-                responseBuilder = ok(returnPlatform)
-                responseBuilder.build()
-            } catch (UnableToExecuteStatementException err) {
-                String executeError = err.getMessage()
-                responseBuilder = badRequest(executeError)
-                responseBuilder.build()
-            }
+        if (!checkPlatform) {
+            responseBuilder = postHelper(newPlatform)
         }
         //Otherwise execute a PUT
         else {
+            if (!validReleaseYear(newPlatform.releaseYear)) {
+                responseBuilder = badRequest("Invalid release year")
+            } else {
+                try {
+                    platformDAO.putPlatform(id, newPlatform.releaseYear, newPlatform.name, newPlatform.manufacturer, newPlatform.computer, newPlatform.console)
+                    returnPlatform = platformDAO.platformByName(newPlatform.name)
+                    responseBuilder = ok(returnPlatform)
+                } catch (UnableToExecuteStatementException err) {
+                    String executeError = err.getMessage()
+                    responseBuilder = badRequest(executeError)
+                }
+            }
+        }
+        responseBuilder.build()
+    }
+
+    private ResponseBuilder postHelper(Platform postPlatform) {
+        ResponseBuilder responseBuilder
+
+        if (!validReleaseYear(postPlatform.releaseYear)) {
+            responseBuilder = badRequest("Invalid release year")
+        } else {
             try {
-                platformDAO.putPlatform(id, newPlatform.getReleaseYear(), newPlatform.getName(), newPlatform.getManufacturer(), newPlatform.getComputer(), newPlatform.getConsole())
-                returnPlatform = platformDAO.platformByName(newPlatform.getName())
+                platformDAO.postPlatform(postPlatform.releaseYear, postPlatform.name, postPlatform.manufacturer, postPlatform.computer, postPlatform.console)
+
+                //necessary to find and return the new object this way because it comes in w/o an id and dates
+                Platform returnPlatform = platformDAO.platformByName(postPlatform.name)
+
                 responseBuilder = ok(returnPlatform)
-                responseBuilder.build()
             } catch (UnableToExecuteStatementException err) {
                 String executeError = err.getMessage()
                 responseBuilder = badRequest(executeError)
-                responseBuilder.build()
             }
+        }
+    }
+
+    private Boolean validReleaseYear(Integer year) {
+        if (1000 < year && year < 9999) {
+            return 1
+        } else {
+            return 0
         }
     }
 }

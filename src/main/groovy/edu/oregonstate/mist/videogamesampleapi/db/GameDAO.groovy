@@ -16,7 +16,7 @@ public interface GameDAO {
         SELECT *
         FROM GAMES WHERE
         RELEASE_YEAR LIKE '%'||:releaseYearFilter||'%'
-        AND PUBLISHER LIKE '%'||:publisherFilter||'%'
+        AND UPPER(PUBLISHER) LIKE '%'||UPPER(:publisherFilter)||'%'
         """)
     List<Game> allGames(@Bind("releaseYearFilter") String releaseYearFilter,
                         @Bind("publisherFilter") String publisherFilter)
